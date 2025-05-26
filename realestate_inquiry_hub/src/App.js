@@ -105,18 +105,21 @@ function AgentsSection() {
   );
 }
 
-// PUBLIC_INTERFACE
+/**
+ * Basic analytics in modern card.
+ */
 function AnalyticsSection() {
-  /** Basic analytics placeholder */
   return (
-    <section>
-      <h2>Basic Analytics</h2>
-      <p>
-        Inquiry volume, status distribution, agent performance.
-        <br />
-        [Charts/analytics placeholder]
-      </p>
-    </section>
+    <CardSection title="Basic Analytics">
+      <div className="analytics-charts">
+        <p style={{ marginBottom: 12 }}>
+          Inquiry volume, status distribution, agent performance.
+        </p>
+        <div className="form-placeholder" style={{ color: "#8e98a5", fontStyle: "italic" }}>
+          [Charts/analytics placeholder]
+        </div>
+      </div>
+    </CardSection>
   );
 }
 
