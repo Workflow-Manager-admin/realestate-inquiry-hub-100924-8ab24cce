@@ -1,0 +1,4 @@
+{
+    "command": "PORT=<port> BROWSER=none npm start",
+    "working_directory": "/home/kavia/workspace/code-generation/realestate-inquiry-hub-100924-8ab24cce/realestate_inquiry_hub"
+}
