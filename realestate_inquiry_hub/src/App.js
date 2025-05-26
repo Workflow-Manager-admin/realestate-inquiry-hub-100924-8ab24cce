@@ -65,21 +65,188 @@ function DashboardSection() {
 
 /**
  * Manual inquiry entry + detail management in modern card.
+ * This implementation includes a fully functional form and an active inquiries list below.
  */
-function InquiriesSection() {
+function InquiriesSection({ inquiries, onAddInquiry }) {
+  // Local state for form fields
+  const [form, setForm] = React.useState({
+    name: "",
+    contact: "",
+    location: "",
+    propertyType: "",
+    budget: "",
+    notes: ""
+  });
+  const [error, setError] = React.useState(null);
+
+  // PUBLIC_INTERFACE
+  function handleChange(e) {
+    const { name, value } = e.target;
+    setForm(f => ({ ...f, [name]: value }));
+    setError(null);
+  }
+
+  // PUBLIC_INTERFACE
+  function handleSubmit(e) {
+    e.preventDefault();
+    if (!form.name.trim() || !form.contact.trim() || !form.location.trim() || !form.propertyType.trim() || !form.budget.trim()) {
+      setError("All fields except notes are required.");
+      return;
+    }
+    onAddInquiry({
+      ...form,
+      id: Date.now(),
+      created: new Date().toISOString()
+    });
+    setForm({
+      name: "",
+      contact: "",
+      location: "",
+      propertyType: "",
+      budget: "",
+      notes: ""
+    });
+    setError(null);
+  }
+
+  // Inquiry list rendering
+  function renderInquirySummary(inq) {
+    return (
+      <div key={inq.id} style={{border: "1px solid #e6eaf6", borderRadius: 8, padding: "16px 13px", marginBottom: 13, background: "#f8fafc"}}>
+        <strong>{inq.name}</strong> <span style={{color:"#2196f3", marginLeft: 4, fontWeight: 500}}>({inq.contact})</span>
+        <div style={{marginTop: 2, fontSize: "1em"}}>
+          <span style={{marginRight:8}}>🏡 {inq.propertyType} | 📍 {inq.location}</span>
+          <span style={{marginLeft:8}}>💰 {inq.budget}</span>
+        </div>
+        {inq.notes && (
+          <div style={{marginTop:7, color: "#444", fontStyle:"italic", fontSize:".99em"}}>Notes: {inq.notes}</div>
+        )}
+        <div style={{marginTop: 2, fontSize: "0.90em", color: "#999"}}>
+          Entered: {new Date(inq.created).toLocaleString()}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <CardSection title="Manual Inquiry Entry">
-      <div className="inquiry-form">
-        <p style={{ marginBottom: 12 }}>
-          Dealers can manually enter new inquiries here.
-        </p>
-        <div className="form-placeholder" style={{ color: "#8e98a5", fontStyle: "italic" }}>
-          [Form placeholder: name, contact, location, property type, budget, notes]
+      <form className="inquiry-form" onSubmit={handleSubmit} autoComplete="off">
+        <div style={{display:"flex", flexWrap:"wrap", gap:"18px 24px", marginBottom: "16px"}}>
+          <div style={{flex: "1 1 230px"}}>
+            <label>
+              Name<br/>
+              <input
+                type="text"
+                name="name"
+                value={form.name}
+                onChange={handleChange}
+                placeholder="Enter full name"
+                required
+                style={{width:"99%", padding:"7px 7px", borderRadius:"6px", border:"1px solid #cfd8dc"}}
+                data-testid="inquiry-form-name"
+              />
+            </label>
+          </div>
+          <div style={{flex: "1 1 230px"}}>
+            <label>
+              Contact Info<br/>
+              <input
+                type="text"
+                name="contact"
+                value={form.contact}
+                onChange={handleChange}
+                placeholder="Phone or WhatsApp"
+                required
+                style={{width:"99%", padding:"7px 7px", borderRadius:"6px", border:"1px solid #cfd8dc"}}
+                data-testid="inquiry-form-contact"
+              />
+            </label>
+          </div>
+          <div style={{flex: "1 1 185px"}}>
+            <label>
+              Location Preference<br/>
+              <input
+                type="text"
+                name="location"
+                value={form.location}
+                onChange={handleChange}
+                placeholder="e.g. Downtown"
+                required
+                style={{width:"99%", padding:"7px 7px", borderRadius:"6px", border:"1px solid #cfd8dc"}}
+                data-testid="inquiry-form-location"
+              />
+            </label>
+          </div>
+          <div style={{flex: "1 1 185px"}}>
+            <label>
+              Property Type<br/>
+              <select
+                name="propertyType"
+                value={form.propertyType}
+                onChange={handleChange}
+                required
+                style={{width:"99%", padding:"7px 7px", borderRadius:"6px", border:"1px solid #cfd8dc"}}
+                data-testid="inquiry-form-propertyType"
+              >
+                <option value="" disabled>
+                  Select type
+                </option>
+                <option value="Apartment">Apartment</option>
+                <option value="Villa">Villa</option>
+                <option value="Plot">Plot</option>
+                <option value="Commercial">Commercial</option>
+                <option value="Other">Other</option>
+              </select>
+            </label>
+          </div>
+          <div style={{flex: "1 1 120px"}}>
+            <label>
+              Budget<br/>
+              <input
+                type="text"
+                name="budget"
+                value={form.budget}
+                onChange={handleChange}
+                placeholder="e.g. 12L - 15L"
+                required
+                style={{width:"99%", padding:"7px 7px", borderRadius:"6px", border:"1px solid #cfd8dc"}}
+                data-testid="inquiry-form-budget"
+              />
+            </label>
+          </div>
+          <div style={{flex: "1 1 95%", marginTop: 2}}>
+            <label>
+              Notes<br/>
+              <textarea
+                name="notes"
+                value={form.notes}
+                onChange={handleChange}
+                placeholder="Add notes (optional)"
+                rows={2}
+                style={{width:"99%", padding:"7px 7px", borderRadius:"6px", border:"1px solid #cfd8dc", resize: "vertical", minHeight: "39px"}}
+                data-testid="inquiry-form-notes"
+              />
+            </label>
+          </div>
         </div>
-        <button className="btn btn-large" style={{ marginTop: 22, minWidth: 150 }}>
+        {error && <div style={{color:"#d32f2f", marginBottom:8}}>{error}</div>}
+        <button className="btn btn-large" style={{marginTop:8, minWidth:150}} type="submit" data-testid="inquiry-form-submit">
           + Add Inquiry
         </button>
-      </div>
+      </form>
+      {inquiries && inquiries.length > 0 && (
+        <div style={{marginTop:36}}>
+          <h3 style={{marginBottom:"12px", color:"#1976d2", fontSize:"1.17em", fontWeight:"600"}}>Inquiries List</h3>
+          <div>
+            {inquiries.slice().reverse().map(renderInquirySummary)}
+          </div>
+        </div>
+      )}
+      {(!inquiries || inquiries.length === 0) && (
+        <div style={{marginTop:34, color:"#8e98a5", fontStyle:"italic"}}>
+          No manual inquiries have been added yet.
+        </div>
+      )}
     </CardSection>
   );
 }
