@@ -17,47 +17,91 @@ const NAV_ITEMS = [
 ];
 
 // Placeholder components for main sections
+/**
+ * Visually modern, card-like section wrapper with class for card styling.
+ */
+function CardSection({ className, title, children, ...props }) {
+  return (
+    <section className={`section card-elevated ${className || ""}`} {...props}>
+      <h2>{title}</h2>
+      {children}
+    </section>
+  );
+}
+
 // PUBLIC_INTERFACE
 function DashboardSection() {
-  /** Dashboard with snapshot + lead management placeholder */
+  /**
+   * Dashboard with snapshot + lead management placeholder,
+   * including modernized filters & header.
+   */
   return (
-    <section>
-      <h2>Lead Management Dashboard</h2>
-      <p>
-        Filterable &amp; sortable list of all inquiries. <br />
-        [Dashboard table/list and filters placeholder]
-      </p>
-    </section>
+    <CardSection title="Lead Management Dashboard">
+      <div className="dashboard-header">
+        <div className="dashboard-title">
+          <span>All Inquiries</span>
+        </div>
+        <div className="dashboard-filters">
+          <button className="btn btn-filter active">All</button>
+          <button className="btn btn-filter">Open</button>
+          <button className="btn btn-filter">Assigned</button>
+          <button className="btn btn-filter">Closed</button>
+        </div>
+      </div>
+      <div className="dashboard-table">
+        <p>
+          <span style={{ color: "#666", fontWeight: "500" }}>
+            Filterable &amp; sortable list of all inquiries.
+          </span>
+          <br />
+          <span style={{ color: "#a9a9a9" }}>
+            [Dashboard table/list and filters placeholder]
+          </span>
+        </p>
+      </div>
+    </CardSection>
   );
 }
 
-// PUBLIC_INTERFACE
+/**
+ * Manual inquiry entry + detail management in modern card.
+ */
 function InquiriesSection() {
-  /** Manual inquiry entry + detail management placeholder */
   return (
-    <section>
-      <h2>Manual Inquiry Entry</h2>
-      <p>
-        Dealers can manually enter new inquiries here.
-        <br />
-        [Form placeholder: name, contact, location, property type, budget, notes]
-      </p>
-    </section>
+    <CardSection title="Manual Inquiry Entry">
+      <div className="inquiry-form">
+        <p style={{ marginBottom: 12 }}>
+          Dealers can manually enter new inquiries here.
+        </p>
+        <div className="form-placeholder" style={{ color: "#8e98a5", fontStyle: "italic" }}>
+          [Form placeholder: name, contact, location, property type, budget, notes]
+        </div>
+        <button className="btn btn-large" style={{ marginTop: 22, minWidth: 150 }}>
+          + Add Inquiry
+        </button>
+      </div>
+    </CardSection>
   );
 }
 
-// PUBLIC_INTERFACE
+/**
+ * Lead assignment & status tracking in modern card.
+ */
 function AgentsSection() {
-  /** Lead assignment & status tracking placeholder */
   return (
-    <section>
-      <h2>Lead Assignment &amp; Status Tracking</h2>
-      <p>
-        Assign inquiries, update statuses, add internal notes/tags.
-        <br />
-        [Assignment/status controls placeholder]
-      </p>
-    </section>
+    <CardSection title="Lead Assignment & Status Tracking">
+      <div className="agent-status-controls">
+        <p style={{ marginBottom: 10 }}>
+          Assign inquiries, update statuses, add internal notes/tags.
+        </p>
+        <div className="form-placeholder" style={{ color: "#8e98a5", fontStyle: "italic" }}>
+          [Assignment/status controls placeholder]
+        </div>
+        <button className="btn" style={{ marginTop: 12 }}>
+          Assign Lead
+        </button>
+      </div>
+    </CardSection>
   );
 }
 
