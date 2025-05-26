@@ -150,27 +150,19 @@ function MainContainer() {
   }
 
   return (
-    <div className="app" style={{ background: "var(--secondary-color)" }}>
-      <nav className="navbar" style={{ background: "var(--primary-color)", color: "#fff" }}>
-        <div className="container" style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <div className="logo" style={{ color: "#fff" }}>
-            <span className="logo-symbol" style={{ color: "var(--accent-color)" }}>🏠</span>
-            <span style={{ fontWeight: 700, letterSpacing: 1 }}>RealEstate Inquiry Hub</span>
+    <div className="app">
+      {/* Elevated, modern navbar */}
+      <nav className="navbar glass-navbar">
+        <div className="container nav-container">
+          <div className="logo">
+            <span className="logo-symbol">🏠</span>
+            <span className="logo-title">RealEstate Inquiry Hub</span>
           </div>
-          <ul style={{
-            margin: 0, padding: 0, display: "flex", gap: 24, listStyle: "none",
-            fontWeight: 500, fontSize: "1rem"
-          }}>
+          <ul className="nav-items">
             {NAV_ITEMS.map((item) => (
               <li
                 key={item.key}
-                style={{
-                  cursor: "pointer",
-                  color: activeTab === item.key ? "var(--accent-color)" : "#fff",
-                  borderBottom: activeTab === item.key ? "3px solid var(--accent-color)" : "3px solid transparent",
-                  paddingBottom: 2,
-                  transition: "color 0.2s"
-                }}
+                className={`nav-item${activeTab === item.key ? " active" : ""}`}
                 onClick={() => setActiveTab(item.key)}
                 tabIndex={0}
                 aria-label={`Navigate to ${item.label}`}
@@ -181,11 +173,10 @@ function MainContainer() {
           </ul>
         </div>
       </nav>
-
       <main>
-        <div className="container" style={{ marginTop: 110, paddingBottom: 64 }}>
+        <div className="container main-content">
           {renderSection()}
-          <div style={{ marginTop: 32, color: "#888", fontSize: "0.95em" }}>
+          <div className="dev-placeholder-note">
             <em>All sections above are placeholders for future development.</em>
           </div>
         </div>
