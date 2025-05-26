@@ -290,13 +290,17 @@ function AnalyticsSection() {
   );
 }
 
-// PUBLIC_INTERFACE
+ // PUBLIC_INTERFACE
 function MainContainer() {
   /**
    * Main container for RealEstate Inquiry Hub.
    * Handles navigation and section display.
+   * Manages top-level state for all manual inquiries.
    */
   const [activeTab, setActiveTab] = useState('dashboard');
+
+  // Local state: array of inquiry objects
+  const [inquiries, setInquiries] = React.useState([]);
 
   // Set theme colors as CSS variables on root (one-time effect)
   React.useEffect(() => {
@@ -306,10 +310,15 @@ function MainContainer() {
     root.style.setProperty('--accent-color', theme.accent);
   }, []);
 
+  // PUBLIC_INTERFACE
+  function handleAddInquiry(newInq) {
+    setInquiries((inquiries) => [...inquiries, newInq]);
+  }
+
   function renderSection() {
     switch (activeTab) {
       case "dashboard": return <DashboardSection />;
-      case "inquiries": return <InquiriesSection />;
+      case "inquiries": return <InquiriesSection inquiries={inquiries} onAddInquiry={handleAddInquiry} />;
       case "agents": return <AgentsSection />;
       case "analytics": return <AnalyticsSection />;
       default: return <DashboardSection />;
